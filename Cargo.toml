@@ -1,0 +1,17 @@
+[package]
+name = "ferrochain"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+async-trait = "0.1"
+convert_case = "0.6.0"
+futures = "0.3.30"
+indoc = "2.0.5"
+schemars = "0.8.21"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0.121"
+
+[dev-dependencies]
+tokio = { version = "1.39.2", features = ["full"] }
