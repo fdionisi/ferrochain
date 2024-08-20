@@ -7,6 +7,7 @@ pub struct Message {
     pub metadata: Option<Value>,
     pub name: Option<String>,
     pub id: Option<String>,
+    pub created_at: Option<u64>,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]

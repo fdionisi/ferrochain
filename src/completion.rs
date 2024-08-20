@@ -1,28 +1,25 @@
 use std::pin::Pin;
 
 use anyhow::Result;
+use async_trait::async_trait;
 use futures::Stream;
 
 use crate::message::{Content, Message};
 
-pub struct CompletionOptions {
-    pub system: Option<String>,
-    pub model: String,
-    pub max_tokens: usize,
-    pub temperature: Option<f32>,
+pub struct StreamEvent {
+    pub event: String,
+    pub data: StreamData,
 }
 
-#[derive(Debug)]
-pub struct CompletionResponse {
-    pub id: String,
-    pub model: String,
-    pub role: String,
-    pub content: Vec<Content>,
-    pub stop_reason: String,
-    pub stop_sequence: Option<String>,
+pub struct StreamData {
+    pub value: serde_json::Value,
+    pub content: Content,
 }
 
+#[async_trait]
 pub trait Completion: Send + Sync {
-    fn complete(&self, messages: Vec<Message>)
-        -> Pin<Box<dyn Stream<Item = Result<Message>> + '_>>;
+    async fn complete(
+        &self,
+        messages: Vec<Message>,
+    ) -> Result<Pin<Box<dyn Stream<Item = Result<StreamEvent>> + Send>>>;
 }
