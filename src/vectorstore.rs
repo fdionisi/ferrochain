@@ -12,7 +12,7 @@ use crate::{
 };
 
 #[derive(Clone, Debug, schemars::JsonSchema, serde::Serialize)]
-pub struct Similarlity {
+pub struct Similarity {
     #[serde(flatten)]
     pub stored: StoredDocument,
     pub score: f32,
@@ -23,7 +23,7 @@ pub trait VectorStore: Send + Sync {
     async fn add_documents(&self, documents: &[Document]) -> Result<()>;
     async fn delete_documents(&self, ids: &[String]) -> Result<()>;
     async fn get_documents(&self, ids: &[String]) -> Result<Vec<StoredDocument>>;
-    async fn search(&self, query: &str, limit: u64) -> Result<Vec<Similarlity>>;
+    async fn search(&self, query: &str, limit: u64) -> Result<Vec<Similarity>>;
 }
 
 #[async_trait]
@@ -34,8 +34,8 @@ impl<T: VectorStore> Retriever for T {
     }
 }
 
-impl From<Similarlity> for StoredDocument {
-    fn from(similarity_document: Similarlity) -> StoredDocument {
+impl From<Similarity> for StoredDocument {
+    fn from(similarity_document: Similarity) -> StoredDocument {
         similarity_document.stored
     }
 }
@@ -96,7 +96,7 @@ pub struct VectorStoreToolInput {
 #[async_trait]
 impl Tool for VectorStoreTool {
     type Input = VectorStoreToolInput;
-    type Output = Vec<Similarlity>;
+    type Output = Vec<Similarity>;
 
     fn name(&self) -> String {
         format!(
