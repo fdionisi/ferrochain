@@ -1,7 +1,7 @@
 pub mod chat_history;
 pub mod completion;
 pub mod document;
-pub mod document_loeader;
+pub mod document_loader;
 pub mod embedding;
 pub mod message;
 pub mod retriever;
