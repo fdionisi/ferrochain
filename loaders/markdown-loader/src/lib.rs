@@ -11,17 +11,17 @@ use ferrochain::{
 use tree_sitter::{Node, Parser};
 use tree_sitter_md::language;
 
-pub struct SemanticMarkdownDocumentLoader {
+pub struct MarkdownLoader {
     path: PathBuf,
 }
 
-impl From<PathBuf> for SemanticMarkdownDocumentLoader {
+impl From<PathBuf> for MarkdownLoader {
     fn from(path: PathBuf) -> Self {
         Self { path }
     }
 }
 
-impl From<&Path> for SemanticMarkdownDocumentLoader {
+impl From<&Path> for MarkdownLoader {
     fn from(path: &Path) -> Self {
         Self {
             path: path.to_path_buf(),
@@ -30,7 +30,7 @@ impl From<&Path> for SemanticMarkdownDocumentLoader {
 }
 
 #[ferrochain::async_trait]
-impl DocumentLoader for SemanticMarkdownDocumentLoader {
+impl DocumentLoader for MarkdownLoader {
     async fn load(&self) -> Result<Vec<Document>> {
         let file = tokio::fs::read_to_string(&self.path).await?;
 
