@@ -9,4 +9,5 @@ pub mod splitter;
 pub mod tool;
 pub mod vectorstore;
 
+pub use anyhow;
 pub use async_trait::async_trait;

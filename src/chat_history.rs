@@ -5,7 +5,7 @@ use crate::message::Message;
 
 /// Most LLM applications have a conversational interface.
 ///
-/// An essential component of a conversation  is being able to refer to information introduced
+/// An essential component of a conversation is being able to refer to information introduced
 /// earlier in the conversation.
 ///
 /// At bare minimum, a conversational system should be able to access some window of past
