@@ -15,3 +15,7 @@ serde_json = "1.0.121"
 
 [dev-dependencies]
 tokio = { version = "1.39.2", features = ["full"] }
+
+[workspace]
+resolver = "2"
+members = ["loaders/markdown-loader", "splitters/markdown-splitter"]

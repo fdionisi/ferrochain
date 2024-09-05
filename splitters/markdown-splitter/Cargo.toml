@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-markdown-splitter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain = { path = "../.." }
+text-splitter = { version = "0.14.1", features = ["markdown"] }

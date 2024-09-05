@@ -1,0 +1,12 @@
+[package]
+name = "ferrochain-markdown-loader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain = { path = "../.." }
+serde_json = "1.0.121"
+serde_yml = "0.0.12"
+tokio = { version = "1.39.2", features = ["fs"] }
+tree-sitter = "0.23.0"
+tree-sitter-md = "0.2.3"
