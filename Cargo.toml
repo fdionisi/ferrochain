@@ -11,7 +11,7 @@ futures = "0.3.30"
 indoc = "2.0.5"
 schemars = "0.8.21"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1.0.121"
+serde_json.workspace = true
 
 [dev-dependencies]
 tokio = { version = "1.39.2", features = ["full"] }
@@ -27,9 +27,11 @@ members = [
     "retrievers/exa-retriever",
     "retrievers/tavily-retriever",
     "splitters/markdown-splitter",
+    "vectorstores/qdrant-vectorstore",
 ]
 
 [workspace.dependencies]
 ferrochain = { path = "." }
 jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", branch = "main" }
+serde_json = "1.0.121"
 voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", branch = "main" }
