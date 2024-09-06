@@ -237,6 +237,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ferrochain-jina-reranker"
+version = "0.1.0"
+dependencies = [
+ "ferrochain",
+ "jina-sdk",
+]
+
+[[package]]
 name = "ferrochain-markdown-loader"
 version = "0.1.0"
 dependencies = [
@@ -258,6 +266,14 @@ dependencies = [
 
 [[package]]
 name = "ferrochain-voyageai-embedder"
+version = "0.1.0"
+dependencies = [
+ "ferrochain",
+ "voyageai-sdk",
+]
+
+[[package]]
+name = "ferrochain-voyageai-reranker"
 version = "0.1.0"
 dependencies = [
  "ferrochain",
@@ -600,7 +616,7 @@ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 [[package]]
 name = "jina-sdk"
 version = "0.1.0"
-source = "git+https://github.com/fdionisi/jina-sdk#4a68756706940d0abdfb156e6cb14aa6c842c0fa"
+source = "git+https://github.com/fdionisi/jina-sdk?branch=main#4a68756706940d0abdfb156e6cb14aa6c842c0fa"
 dependencies = [
  "anyhow",
  "reqwest",
@@ -1562,7 +1578,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 [[package]]
 name = "voyageai-sdk"
 version = "0.1.0"
-source = "git+https://github.com/fdionisi/voyageai-sdk#d3443388191b0d5f6a20244d482060218eb163d6"
+source = "git+https://github.com/fdionisi/voyageai-sdk?branch=main#d3443388191b0d5f6a20244d482060218eb163d6"
 dependencies = [
  "anyhow",
  "reqwest",

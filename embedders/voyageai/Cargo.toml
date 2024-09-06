@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 ferrochain.workspace = true
-voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk" }
+voyageai-sdk.workspace = true

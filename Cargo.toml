@@ -22,8 +22,12 @@ members = [
     "embedders/jina",
     "embedders/voyageai",
     "loaders/markdown-loader",
+    "rerankers/jina",
+    "rerankers/voyageai",
     "splitters/markdown-splitter",
 ]
 
 [workspace.dependencies]
 ferrochain = { path = "." }
+jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", branch = "main" }
+voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", branch = "main" }
