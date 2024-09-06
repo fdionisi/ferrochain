@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-jina-embedder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain.workspace = true
+jina-sdk = { git = "https://github.com/fdionisi/jina-sdk" }

@@ -18,4 +18,12 @@ tokio = { version = "1.39.2", features = ["full"] }
 
 [workspace]
 resolver = "2"
-members = ["loaders/markdown-loader", "splitters/markdown-splitter"]
+members = [
+    "embedders/jina",
+    "embedders/voyageai",
+    "loaders/markdown-loader",
+    "splitters/markdown-splitter",
+]
+
+[workspace.dependencies]
+ferrochain = { path = "." }

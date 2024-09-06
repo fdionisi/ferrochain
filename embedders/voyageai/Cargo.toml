@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-voyageai-embedder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain.workspace = true
+voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk" }
