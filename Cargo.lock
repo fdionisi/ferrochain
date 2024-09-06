@@ -208,6 +208,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "exa-sdk"
+version = "0.1.0"
+source = "git+https://github.com/fdionisi/exa-sdk?rev=7c2df0150c192fc957f85d6571302096e244af32#7c2df0150c192fc957f85d6571302096e244af32"
+dependencies = [
+ "anyhow",
+ "reqwest",
+ "secrecy",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "url",
+]
+
+[[package]]
 name = "fastrand"
 version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -226,6 +240,14 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+]
+
+[[package]]
+name = "ferrochain-exa-retriever"
+version = "0.1.0"
+dependencies = [
+ "exa-sdk",
+ "ferrochain",
 ]
 
 [[package]]
@@ -262,6 +284,14 @@ version = "0.1.0"
 dependencies = [
  "ferrochain",
  "text-splitter",
+]
+
+[[package]]
+name = "ferrochain-tavily-retriever"
+version = "0.1.0"
+dependencies = [
+ "ferrochain",
+ "tavily-sdk",
 ]
 
 [[package]]
@@ -1299,6 +1329,20 @@ checksum = "8e1d1b10ced5ca923a1fcb8d03e96b8d3268065d724548c0211415ff6ac6bac4"
 dependencies = [
  "core-foundation-sys",
  "libc",
+]
+
+[[package]]
+name = "tavily-sdk"
+version = "0.1.0"
+source = "git+https://github.com/fdionisi/tavily-sdk?rev=ef88b326e215aae07f2533afca2a2e2bfd942ffd#ef88b326e215aae07f2533afca2a2e2bfd942ffd"
+dependencies = [
+ "anyhow",
+ "reqwest",
+ "secrecy",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "url",
 ]
 
 [[package]]

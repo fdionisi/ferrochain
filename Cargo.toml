@@ -24,6 +24,8 @@ members = [
     "loaders/markdown-loader",
     "rerankers/jina",
     "rerankers/voyageai",
+    "retrievers/exa-retriever",
+    "retrievers/tavily-retriever",
     "splitters/markdown-splitter",
 ]
 

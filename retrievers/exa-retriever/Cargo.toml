@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-exa-retriever"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+exa-sdk = { git = "https://github.com/fdionisi/exa-sdk", rev = "7c2df0150c192fc957f85d6571302096e244af32" }
+ferrochain.workspace = true

@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-tavily-retriever"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain.workspace = true
+tavily-sdk = { git = "https://github.com/fdionisi/tavily-sdk", rev = "ef88b326e215aae07f2533afca2a2e2bfd942ffd" }
