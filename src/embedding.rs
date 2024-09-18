@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use crate::async_trait;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Embedding(Vec<f32>);
 
 impl Embedding {
