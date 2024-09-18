@@ -11,16 +11,16 @@ use crate::message::Message;
 /// At bare minimum, a conversational system should be able to access some window of past
 /// messages directly.
 ///
-/// The concept of `ChatHistory` refers to a trait which can be used to wrap an arbitrary
-/// chain. This `ChatHistory` will keep track of inputs and outputs of the underlying chain,
+/// The concept of `Memory` refers to a trait which can be used to wrap an arbitrary
+/// chain. This `Memory` will keep track of inputs and outputs of the underlying chain,
 /// and append them as messages to a message database.
 ///
 /// Future interactions will then load those messages and pass them into the chain as part
 /// of the input.
 #[async_trait]
-pub trait ChatHistory: Send + Sync {
+pub trait Memory: Send + Sync {
     async fn messages(&self) -> Result<Vec<Message>>;
-    async fn add_messages(&self, message: Vec<Message>) -> Result<()>;
+    async fn add_messages(&self, messages: Vec<Message>) -> Result<()>;
 
     async fn clear(&self) -> Result<()>;
 }

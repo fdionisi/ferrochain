@@ -19,6 +19,7 @@ tokio = { version = "1.39.2", features = ["full"] }
 [workspace]
 resolver = "2"
 members = [
+    "completions/anthropic",
     "embedders/jina-embedder",
     "embedders/voyageai-embedder",
     "loaders/markdown-loader",
@@ -34,4 +35,4 @@ members = [
 ferrochain = { path = "." }
 jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", branch = "main" }
 serde_json = "1.0.121"
-voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", branch = "main" }
+voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", rev = "f2990ebebb881cbab685c0653baf49ba7a2e6582" }
