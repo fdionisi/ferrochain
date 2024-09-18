@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anthropic = { git = "https://github.com/fdionisi/anthropic-sdk", rev = "ca40d11cb516498b7b96fbce6f22384625c62f30" }
+anthropic = { git = "https://github.com/fdionisi/anthropic-sdk", rev = "6126c4940aee86a218e4a75eefade511adc843de" }
 ferrochain.workspace = true
