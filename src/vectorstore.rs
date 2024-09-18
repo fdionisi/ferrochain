@@ -11,7 +11,7 @@ use crate::{
     tool::Tool,
 };
 
-#[derive(Clone, Debug, schemars::JsonSchema, serde::Serialize)]
+#[derive(Clone, Debug, schemars::JsonSchema, serde::Deserialize, serde::Serialize)]
 pub struct Similarity {
     #[serde(flatten)]
     pub stored: StoredDocument,

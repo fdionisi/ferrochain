@@ -5,7 +5,7 @@ use serde_json::Value;
 /// A `Document` object contains information about some data. It has two attributes:
 /// - `content`: a string containing the data itself.
 /// - `metadata`: a map of key-value pairs containing additional information about the data.
-#[derive(Clone, Debug, schemars::JsonSchema, serde::Serialize)]
+#[derive(Clone, Debug, schemars::JsonSchema, serde::Deserialize, serde::Serialize)]
 pub struct Document {
     /// The plain-text representation of the document.
     pub content: String,
@@ -14,7 +14,7 @@ pub struct Document {
 }
 
 /// A `StoredDocument` object is a representation of a `Document` object that has been stored in a database.
-#[derive(Clone, Debug, schemars::JsonSchema, serde::Serialize)]
+#[derive(Clone, Debug, schemars::JsonSchema, serde::Deserialize, serde::Serialize)]
 pub struct StoredDocument {
     pub id: String,
     #[serde(flatten)]
