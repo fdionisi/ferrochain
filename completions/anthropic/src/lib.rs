@@ -7,23 +7,32 @@ use anthropic::{
 };
 use ferrochain::{
     anyhow::{anyhow, Result},
-    completion::{Completion, CompletionRequest, StreamEvent},
+    completion::{Completion, StreamEvent},
     futures::{Stream, StreamExt},
-    message::{Content, ImageSource},
+    message::{Content, ImageSource, Message},
 };
 
 pub struct AnthropicCompletion {
     sdk: Anthropic,
+    model: Model,
+    system: Option<Vec<Content>>,
+    temperature: Option<f32>,
 }
 
 pub struct AnthropicCompletionBuilder {
     builder: AnthropicBuilder,
+    model: Option<Model>,
+    system: Option<Vec<Content>>,
+    temperature: Option<f32>,
 }
 
 impl AnthropicCompletion {
     pub fn builder() -> AnthropicCompletionBuilder {
         AnthropicCompletionBuilder {
             builder: Anthropic::builder(),
+            model: None,
+            system: None,
+            temperature: None,
         }
     }
 }
@@ -45,9 +54,27 @@ impl AnthropicCompletionBuilder {
         self
     }
 
-    pub fn build(&self) -> Result<AnthropicCompletion> {
+    pub fn model(&mut self, model: Model) -> &mut Self {
+        self.model = Some(model);
+        self
+    }
+
+    pub fn system(&mut self, system: Vec<Content>) -> &mut Self {
+        self.system = Some(system);
+        self
+    }
+
+    pub fn temperature(&mut self, temperature: f32) -> &mut Self {
+        self.temperature = Some(temperature);
+        self
+    }
+
+    pub fn build(self) -> Result<AnthropicCompletion> {
         Ok(AnthropicCompletion {
             sdk: self.builder.build()?,
+            model: self.model.ok_or_else(|| anyhow!("model is required"))?,
+            system: self.system.clone(),
+            temperature: self.temperature,
         })
     }
 }
@@ -56,10 +83,9 @@ impl AnthropicCompletionBuilder {
 impl Completion for AnthropicCompletion {
     async fn complete(
         &self,
-        request: CompletionRequest,
+        messages: Vec<Message>,
     ) -> Result<Pin<Box<dyn Stream<Item = Result<StreamEvent>> + Send>>> {
-        let messages: Vec<anthropic::messages::Message> = request
-            .messages
+        let messages: Vec<anthropic::messages::Message> = messages
             .into_iter()
             .map(|m| anthropic::messages::Message {
                 role: match m.role.as_str() {
@@ -79,12 +105,12 @@ impl Completion for AnthropicCompletion {
         Ok(self
             .sdk
             .messages_stream(CreateMessageRequest {
-                model: request.model,
+                model: self.model.to_string(),
                 messages,
                 max_tokens: 8192,
                 metadata: Default::default(),
                 stop_sequences: None,
-                system: request.system.map(|parts| {
+                system: self.system.to_owned().map(|parts| {
                     anthropic::messages::Content::Multi(
                         parts
                             .into_iter()
@@ -92,7 +118,7 @@ impl Completion for AnthropicCompletion {
                             .collect(),
                     )
                 }),
-                temperature: request.temperature,
+                temperature: self.temperature,
                 tool_choice: None,
                 tools: None,
                 top_k: None,

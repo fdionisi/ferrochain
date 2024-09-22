@@ -33,18 +33,18 @@ pub enum StreamEvent {
     },
 }
 
-#[derive(Default)]
-pub struct CompletionRequest {
-    pub model: String,
-    pub messages: Vec<Message>,
-    pub system: Option<Vec<Content>>,
-    pub temperature: Option<f32>,
-}
+// #[derive(Default)]
+// pub struct CompletionRequest {
+//     pub model: String,
+//     pub messages: Vec<Message>,
+//     pub system: Option<Vec<Content>>,
+//     pub temperature: Option<f32>,
+// }
 
 #[async_trait]
 pub trait Completion: Send + Sync {
     async fn complete(
         &self,
-        request: CompletionRequest,
+        messages: Vec<Message>,
     ) -> Result<Pin<Box<dyn Stream<Item = Result<StreamEvent>> + Send>>>;
 }
