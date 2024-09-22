@@ -38,7 +38,7 @@ impl AnthropicCompletion {
 }
 
 impl AnthropicCompletionBuilder {
-    pub fn api_key<S>(&mut self, api_key: S) -> &mut Self
+    pub fn with_api_key<S>(mut self, api_key: S) -> Self
     where
         S: AsRef<str>,
     {
@@ -46,7 +46,7 @@ impl AnthropicCompletionBuilder {
         self
     }
 
-    pub fn base_url<S>(&mut self, base_url: S) -> &mut Self
+    pub fn with_base_url<S>(mut self, base_url: S) -> Self
     where
         S: AsRef<str>,
     {
@@ -54,17 +54,17 @@ impl AnthropicCompletionBuilder {
         self
     }
 
-    pub fn model(&mut self, model: Model) -> &mut Self {
+    pub fn with_model(mut self, model: Model) -> Self {
         self.model = Some(model);
         self
     }
 
-    pub fn system(&mut self, system: Vec<Content>) -> &mut Self {
+    pub fn with_system(mut self, system: Vec<Content>) -> Self {
         self.system = Some(system);
         self
     }
 
-    pub fn temperature(&mut self, temperature: f32) -> &mut Self {
+    pub fn with_temperature(mut self, temperature: f32) -> Self {
         self.temperature = Some(temperature);
         self
     }
