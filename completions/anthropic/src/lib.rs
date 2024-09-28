@@ -17,6 +17,7 @@ pub struct AnthropicCompletion {
     model: Model,
     system: Option<Vec<Content>>,
     temperature: Option<f32>,
+    max_tokens: usize,
 }
 
 pub struct AnthropicCompletionBuilder {
@@ -24,6 +25,7 @@ pub struct AnthropicCompletionBuilder {
     model: Option<Model>,
     system: Option<Vec<Content>>,
     temperature: Option<f32>,
+    max_tokens: Option<usize>,
 }
 
 impl AnthropicCompletion {
@@ -33,6 +35,7 @@ impl AnthropicCompletion {
             model: None,
             system: None,
             temperature: None,
+            max_tokens: None,
         }
     }
 }
@@ -69,12 +72,20 @@ impl AnthropicCompletionBuilder {
         self
     }
 
+    pub fn with_max_tokens(mut self, max_tokens: usize) -> Self {
+        self.max_tokens = Some(max_tokens);
+        self
+    }
+
     pub fn build(self) -> Result<AnthropicCompletion> {
         Ok(AnthropicCompletion {
             sdk: self.builder.build()?,
             model: self.model.ok_or_else(|| anyhow!("model is required"))?,
-            system: self.system.clone(),
+            system: self.system,
             temperature: self.temperature,
+            max_tokens: self
+                .max_tokens
+                .ok_or_else(|| anyhow!("max_tokens is required"))?,
         })
     }
 }
@@ -107,7 +118,7 @@ impl Completion for AnthropicCompletion {
             .messages_stream(CreateMessageRequest {
                 model: self.model.to_string(),
                 messages,
-                max_tokens: 8192,
+                max_tokens: self.max_tokens as u32,
                 metadata: Default::default(),
                 stop_sequences: None,
                 system: self.system.to_owned().map(|parts| {
