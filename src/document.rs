@@ -10,6 +10,7 @@ pub struct Document {
     /// The plain-text representation of the document.
     pub content: String,
     /// Additional and arbitrary metadata about the document.
+    #[serde(flatten)]
     pub metadata: HashMap<String, Value>,
 }
 
@@ -19,6 +20,14 @@ pub struct StoredDocument {
     pub id: String,
     #[serde(flatten)]
     pub document: Document,
+}
+
+impl TryFrom<Document> for StoredDocument {
+    type Error = anyhow::Error;
+
+    fn try_from(value: Document) -> Result<Self, Self::Error> {
+        Ok(serde_json::from_value(serde_json::to_value(&value)?)?)
+    }
 }
 
 impl ToString for Document {

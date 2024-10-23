@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.86"
+anyhow.workspace = true
 async-trait = "0.1"
 convert_case = "0.6.0"
 futures = "0.3.30"
@@ -22,17 +22,23 @@ members = [
     "completions/anthropic",
     "embedders/jina-embedder",
     "embedders/voyageai-embedder",
+    "graphstore/neo4j-graphstore",
     "loaders/markdown-loader",
+    "memories/in-memory-memory",
     "rerankers/jina-reranker",
     "rerankers/voyageai-reranker",
     "retrievers/exa-retriever",
     "retrievers/tavily-retriever",
     "splitters/markdown-splitter",
+    "splitters/code-splitter",
     "vectorstores/qdrant-vectorstore",
 ]
 
 [workspace.dependencies]
+anyhow = "1.0.86"
 ferrochain = { path = "." }
-jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", branch = "main" }
+jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", rev = "bb3845c85787017339603fe5b4a3b03447786cdd" }
 serde_json = "1.0.121"
-voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", rev = "f2990ebebb881cbab685c0653baf49ba7a2e6582" }
+voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", rev = "e61ea19730b343fa448b3100a84170ac26f243e2" }
+exa-sdk = { git = "https://github.com/fdionisi/exa-sdk", rev = "24e8fb140d57cb8dafd7aad3390edff96089cfd7" }
+http-client = { git = "https://github.com/fdionisi/http-client", rev = "033ac96ab12ac3d13b78f9725b237380917c7094" }

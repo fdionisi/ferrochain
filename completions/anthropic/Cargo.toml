@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anthropic = { git = "https://github.com/fdionisi/anthropic-sdk", rev = "6126c4940aee86a218e4a75eefade511adc843de" }
+anthropic = { git = "https://github.com/fdionisi/anthropic-sdk", rev = "914dfb5718dbf6d4225b0d233fe38b7dba89803e" }
+async-stream = "0.3.6"
+http-client.workspace = true
 ferrochain.workspace = true
+serde_json.workspace = true

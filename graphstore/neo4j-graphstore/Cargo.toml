@@ -1,0 +1,11 @@
+[package]
+name = "ferrochain-neo4j-graphstore"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+ferrochain.workspace = true
+neo4rs = { version = "0.8.0", features = ["json"] }
+thiserror = { version = "*" }
+serde_json.workspace = true

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 
-use crate::{document::Document, vectorstore::Similarity};
+use crate::{document::Document, vector_store::Similarity};
 
 #[async_trait]
 pub trait Reranker: Send + Sync {

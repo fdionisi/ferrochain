@@ -1,8 +1,9 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 pub use exa_sdk::SearchKind;
-use exa_sdk::{Exa, ExaBuilder, SearchContent, SearchContentTextType, SearchRequest};
+use exa_sdk::{Exa, ExaBuilder, SearchContent, SearchContentText, SearchRequest};
 use ferrochain::{anyhow::Result, document::Document, retriever::Retriever};
+use http_client::HttpClient;
 
 pub struct ExaRetriever {
     client: Exa,
@@ -43,7 +44,10 @@ impl Retriever for ExaRetriever {
             .search(SearchRequest {
                 query: query.into(),
                 contents: Some(SearchContent {
-                    text: Some(SearchContentTextType::Bool(true)),
+                    text: Some(SearchContentText {
+                        include_html_tags: Some(false),
+                        ..Default::default()
+                    }),
                     ..Default::default()
                 }),
                 use_autoprompt: self.use_autoprompt,
@@ -65,7 +69,46 @@ impl Retriever for ExaRetriever {
                     .results
                     .into_iter()
                     .map(|result| {
-                        let metadata = HashMap::new();
+                        let mut metadata = HashMap::new();
+                        if let Some(author) = result.author {
+                            if !author.is_empty() {
+                                metadata.insert(
+                                    "author".into(),
+                                    serde_json::to_value(&author).unwrap(),
+                                );
+                            }
+                        }
+
+                        if let Some(published_date) = result.published_date {
+                            if !published_date.is_empty() {
+                                metadata.insert(
+                                    "published_date".into(),
+                                    serde_json::to_value(&published_date).unwrap(),
+                                );
+                            }
+                        }
+
+                        if let Some(score) = result.score {
+                            metadata.insert("score".into(), serde_json::to_value(&score).unwrap());
+                        }
+
+                        if let Some(highlights) = result.highlights {
+                            metadata.insert(
+                                "highlights".into(),
+                                serde_json::to_value(&highlights).unwrap(),
+                            );
+                        }
+
+                        if let Some(highlight_scores) = result.highlight_scores {
+                            metadata.insert(
+                                "highlight_scores".into(),
+                                serde_json::to_value(&highlight_scores).unwrap(),
+                            );
+                        }
+
+                        metadata.insert("id".into(), serde_json::to_value(&result.id).unwrap());
+                        metadata.insert("url".into(), serde_json::to_value(&result.url).unwrap());
+
                         Document {
                             content: result.text.unwrap(),
                             metadata,
@@ -77,13 +120,18 @@ impl Retriever for ExaRetriever {
 }
 
 impl ExaRetrieverBuilder {
+    pub fn with_http_client(mut self, http_client: Arc<dyn HttpClient>) -> Self {
+        self.exa_builder = self.exa_builder.with_http_client(http_client);
+        self
+    }
+
     pub fn with_api_key(mut self, api_key: String) -> Self {
-        self.exa_builder = self.exa_builder.api_key(api_key);
+        self.exa_builder = self.exa_builder.with_api_key(api_key);
         self
     }
 
     pub fn with_base_url(mut self, base_url: String) -> Self {
-        self.exa_builder = self.exa_builder.base_url(base_url);
+        self.exa_builder = self.exa_builder.with_base_url(base_url);
         self
     }
 

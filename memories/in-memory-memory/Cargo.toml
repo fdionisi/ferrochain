@@ -1,9 +1,8 @@
 [package]
-name = "ferrochain-jina-embedder"
+name = "ferrochain-in-memory-memory"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow.workspace = true
 ferrochain.workspace = true
-http-client.workspace = true
-jina-sdk.workspace = true

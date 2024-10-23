@@ -63,18 +63,24 @@ impl VectorStoreTool {
 }
 
 impl VectorStoreToolBuilder {
-    pub fn vector_store(mut self, vector_store: Arc<dyn VectorStore>) -> Self {
+    pub fn with_vector_store(mut self, vector_store: Arc<dyn VectorStore>) -> Self {
         self.vector_store = Some(vector_store);
         self
     }
 
-    pub fn name(mut self, name: String) -> Self {
-        self.name = Some(name);
+    pub fn with_name<S>(mut self, name: S) -> Self
+    where
+        S: Into<String>,
+    {
+        self.name = Some(name.into());
         self
     }
 
-    pub fn description(mut self, description: String) -> Self {
-        self.description = Some(description);
+    pub fn with_description<S>(mut self, description: S) -> Self
+    where
+        S: Into<String>,
+    {
+        self.description = Some(description.into());
         self
     }
 

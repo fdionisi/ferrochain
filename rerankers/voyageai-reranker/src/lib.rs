@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 use ferrochain::{
     anyhow::{anyhow, Result},
     document::{Document, StoredDocument},
     reranker::Reranker,
-    vectorstore::Similarity,
+    vector_store::Similarity,
 };
+use http_client::HttpClient;
 use voyageai_sdk::{RerankModel, RerankRequest, VoyageAi, VoyageAiBuilder};
 
 pub struct VoyageAiReranker {
@@ -68,13 +71,24 @@ impl Reranker for VoyageAiReranker {
 }
 
 impl VoyageAiRerankerBuilder {
-    pub fn api_key(mut self, api_key: String) -> Self {
-        self.voyageai_builder = self.voyageai_builder.api_key(api_key);
+    pub fn with_http_client(mut self, http_client: Arc<dyn HttpClient>) -> Self {
+        self.voyageai_builder = self.voyageai_builder.with_http_client(http_client);
         self
     }
 
-    pub fn base_url(mut self, base_url: String) -> Self {
-        self.voyageai_builder = self.voyageai_builder.base_url(base_url);
+    pub fn with_api_key<S>(mut self, api_key: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.voyageai_builder = self.voyageai_builder.with_api_key(api_key);
+        self
+    }
+
+    pub fn with_base_url<S>(mut self, base_url: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.voyageai_builder = self.voyageai_builder.with_base_url(base_url);
         self
     }
 

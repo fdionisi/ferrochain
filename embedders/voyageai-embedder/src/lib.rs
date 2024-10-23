@@ -1,7 +1,10 @@
+use std::sync::Arc;
+
 use ferrochain::{
     anyhow::{anyhow, Result},
     embedding::{Embedder, Embedding},
 };
+use http_client::HttpClient;
 use voyageai_sdk::{EmbeddingInput, EmbeddingRequest, VoyageAi, VoyageAiBuilder};
 pub use voyageai_sdk::{EmbeddingInputType, EmbeddingModel};
 
@@ -12,6 +15,7 @@ pub struct VoyageAiEmbedder {
     truncation: Option<bool>,
 }
 
+#[derive(Clone)]
 pub struct VoyageAiEmbedderBuilder {
     voyageai_builder: VoyageAiBuilder,
     model: Option<EmbeddingModel>,
@@ -54,27 +58,38 @@ impl Embedder for VoyageAiEmbedder {
 }
 
 impl VoyageAiEmbedderBuilder {
-    pub fn api_key(mut self, api_key: String) -> Self {
-        self.voyageai_builder = self.voyageai_builder.api_key(api_key);
+    pub fn with_http_client(mut self, http_client: Arc<dyn HttpClient>) -> Self {
+        self.voyageai_builder = self.voyageai_builder.with_http_client(http_client);
         self
     }
 
-    pub fn base_url(mut self, base_url: String) -> Self {
-        self.voyageai_builder = self.voyageai_builder.base_url(base_url);
+    pub fn with_api_key<S>(mut self, api_key: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.voyageai_builder = self.voyageai_builder.with_api_key(api_key);
         self
     }
 
-    pub fn model(mut self, model: EmbeddingModel) -> Self {
+    pub fn with_base_url<S>(mut self, base_url: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.voyageai_builder = self.voyageai_builder.with_base_url(base_url);
+        self
+    }
+
+    pub fn with_model(mut self, model: EmbeddingModel) -> Self {
         self.model = Some(model);
         self
     }
 
-    pub fn input_type(mut self, input_type: EmbeddingInputType) -> Self {
+    pub fn with_input_type(mut self, input_type: EmbeddingInputType) -> Self {
         self.input_type = Some(input_type);
         self
     }
 
-    pub fn truncation(mut self, truncation: bool) -> Self {
+    pub fn with_truncation(mut self, truncation: bool) -> Self {
         self.truncation = Some(truncation);
         self
     }

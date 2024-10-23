@@ -5,12 +5,15 @@ use async_trait::async_trait;
 use schemars::{schema::RootSchema, schema_for, JsonSchema};
 use serde_json::Value;
 
+use crate::message::{ToolResult, ToolUse};
+
 #[derive(Debug)]
 pub struct ToolDescriptor {
     pub name: String,
     pub description: String,
     pub input: RootSchema,
     pub output: RootSchema,
+    pub external: bool,
 }
 
 #[async_trait]
@@ -28,6 +31,7 @@ pub trait Tool {
             description: self.description().to_string(),
             input: schema_for!(Self::Input),
             output: schema_for!(Self::Output),
+            external: false,
         }
     }
 
@@ -61,6 +65,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct ToolProvider(HashMap<String, Arc<dyn AnyTool>>);
 
 impl ToolProvider {
@@ -76,12 +81,17 @@ impl ToolProvider {
             .insert(tool.name().to_string(), Arc::new(tool) as Arc<dyn AnyTool>);
     }
 
-    pub async fn execute(&self, name: &str, input: Value) -> Result<String> {
-        let Some(tool) = self.0.get(name) else {
-            bail!("Tool not found: {name}")
+    pub async fn execute(&self, tool_use: &ToolUse) -> Result<ToolResult> {
+        let Some(tool) = self.0.get(&tool_use.tool) else {
+            bail!("Tool not found: {}", tool_use.tool)
         };
 
-        tool.execute(input).await
+        let result = tool.execute(tool_use.input.clone()).await?;
+
+        Ok(ToolResult {
+            id: tool_use.id.clone(),
+            content: result,
+        })
     }
 
     pub fn list(&self) -> impl Iterator<Item = ToolDescriptor> + '_ {
@@ -128,8 +138,15 @@ mod tests {
         provider.register(EchoTool);
 
         let input = json!({"message": "Hello, world!"});
-        let output = provider.execute("echo", input.clone()).await.unwrap();
+        let output = provider
+            .execute(&ToolUse {
+                id: "1".into(),
+                tool: "echo".into(),
+                input: input.clone(),
+            })
+            .await
+            .unwrap();
 
-        assert_eq!(input, output);
+        assert_eq!(input, output.content);
     }
 }

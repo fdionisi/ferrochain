@@ -5,4 +5,5 @@ edition = "2021"
 
 [dependencies]
 ferrochain.workspace = true
+http-client.workspace = true
 jina-sdk.workspace = true

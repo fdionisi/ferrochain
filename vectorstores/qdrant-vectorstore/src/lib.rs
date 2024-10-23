@@ -4,7 +4,7 @@ use ferrochain::{
     anyhow::{anyhow, Result},
     document::{Document, StoredDocument},
     embedding::Embedder,
-    vectorstore::{Similarity, VectorStore},
+    vector_store::{Similarity, VectorStore},
 };
 pub use qdrant_client;
 use qdrant_client::{
@@ -115,27 +115,30 @@ impl VectorStore for QdrantVectorStore {
 }
 
 impl QdrantVectorStoreBuilder {
-    pub fn client(mut self, client: Qdrant) -> Self {
+    pub fn with_client(mut self, client: Qdrant) -> Self {
         self.client = Some(client);
         self
     }
 
-    pub fn collection_name(mut self, collection_name: String) -> Self {
-        self.collection_name = Some(collection_name);
+    pub fn with_collection_name<S>(mut self, collection_name: S) -> Self
+    where
+        S: Into<String>,
+    {
+        self.collection_name = Some(collection_name.into());
         self
     }
 
-    pub fn embedder(self, embedder: Arc<dyn Embedder>) -> Self {
-        self.query_embedder(embedder.clone())
-            .document_embedder(embedder.clone())
+    pub fn with_embedder(self, embedder: Arc<dyn Embedder>) -> Self {
+        self.with_query_embedder(embedder.clone())
+            .with_document_embedder(embedder.clone())
     }
 
-    pub fn query_embedder(mut self, embedder: Arc<dyn Embedder>) -> Self {
+    pub fn with_query_embedder(mut self, embedder: Arc<dyn Embedder>) -> Self {
         self.query_embedder = Some(embedder);
         self
     }
 
-    pub fn document_embedder(mut self, embedder: Arc<dyn Embedder>) -> Self {
+    pub fn with_document_embedder(mut self, embedder: Arc<dyn Embedder>) -> Self {
         self.document_embedder = Some(embedder);
         self
     }

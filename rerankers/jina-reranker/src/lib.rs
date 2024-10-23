@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 use ferrochain::{
     anyhow::{anyhow, Result},
     document::{Document, StoredDocument},
     reranker::Reranker,
-    vectorstore::Similarity,
+    vector_store::Similarity,
 };
+use http_client::HttpClient;
 use jina_sdk::{DocumentType, Jina, JinaBuilder, QueryType, RerankRequest, RerankerModel};
 
 pub struct JinaReranker {
@@ -29,13 +32,24 @@ impl JinaReranker {
 }
 
 impl JinaRerankerBuilder {
-    pub fn with_api_key(mut self, api_key: String) -> Self {
-        self.jina_builder = self.jina_builder.api_key(api_key);
+    pub fn with_http_client(mut self, http_client: Arc<dyn HttpClient>) -> Self {
+        self.jina_builder = self.jina_builder.with_http_client(http_client);
         self
     }
 
-    pub fn with_base_url(mut self, api_key: String) -> Self {
-        self.jina_builder = self.jina_builder.base_url(api_key);
+    pub fn with_api_key<S>(mut self, api_key: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.jina_builder = self.jina_builder.with_api_key(api_key);
+        self
+    }
+
+    pub fn with_base_url<S>(mut self, base_url: S) -> Self
+    where
+        S: AsRef<str>,
+    {
+        self.jina_builder = self.jina_builder.with_base_url(base_url);
         self
     }
 
