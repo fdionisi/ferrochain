@@ -7,7 +7,8 @@ use ferrochain::{
     vector_store::Similarity,
 };
 use http_client::HttpClient;
-use voyageai_sdk::{RerankModel, RerankRequest, VoyageAi, VoyageAiBuilder};
+pub use voyageai_sdk::RerankModel;
+use voyageai_sdk::{RerankRequest, VoyageAi, VoyageAiBuilder};
 
 pub struct VoyageAiReranker {
     client: VoyageAi,

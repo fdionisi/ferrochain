@@ -20,18 +20,18 @@ tokio = { version = "1.39.2", features = ["full"] }
 resolver = "2"
 members = [
     "completions/anthropic",
-    "embedders/jina-embedder",
-    "embedders/voyageai-embedder",
-    "graphstore/neo4j-graphstore",
-    "loaders/markdown-loader",
-    "memories/in-memory-memory",
-    "rerankers/jina-reranker",
-    "rerankers/voyageai-reranker",
-    "retrievers/exa-retriever",
-    "retrievers/tavily-retriever",
-    "splitters/markdown-splitter",
-    "splitters/code-splitter",
-    "vectorstores/qdrant-vectorstore",
+    "embedders/jina",
+    "embedders/voyageai",
+    "graphstore/neo4j",
+    "loaders/markdown",
+    "memories/in-memory",
+    "rerankers/jina",
+    "rerankers/voyageai",
+    "retrievers/exa",
+    "retrievers/tavily",
+    "splitters/markdown",
+    "splitters/code",
+    "vectorstores/qdrant",
 ]
 
 [workspace.dependencies]

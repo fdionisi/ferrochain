@@ -8,24 +8,30 @@ use ferrochain::{
 };
 pub use qdrant_client;
 use qdrant_client::{
-    qdrant::{PointStruct, ScoredPoint, SearchPointsBuilder, UpsertPointsBuilder},
+    qdrant::{
+        CreateCollectionBuilder, Distance, PointStruct, ScoredPoint, SearchPointsBuilder,
+        UpsertPointsBuilder, VectorParamsBuilder,
+    },
     Payload, Qdrant,
 };
 use serde_json::json;
 use uuid::Uuid;
 
 pub struct QdrantVectorStore {
-    client: Qdrant,
+    client: Arc<Qdrant>,
     collection_name: String,
     query_embedder: Arc<dyn Embedder>,
     document_embedder: Arc<dyn Embedder>,
+    vector_size: u64,
 }
 
+#[derive(Clone)]
 pub struct QdrantVectorStoreBuilder {
-    client: Option<Qdrant>,
+    client: Option<Arc<Qdrant>>,
     collection_name: Option<String>,
     query_embedder: Option<Arc<dyn Embedder>>,
     document_embedder: Option<Arc<dyn Embedder>>,
+    vector_size: Option<u64>,
 }
 
 impl QdrantVectorStore {
@@ -35,12 +41,28 @@ impl QdrantVectorStore {
             collection_name: None,
             query_embedder: None,
             document_embedder: None,
+            vector_size: None,
         }
     }
 }
 
 #[ferrochain::async_trait]
 impl VectorStore for QdrantVectorStore {
+    async fn ensure_index(&self) -> Result<()> {
+        if !self.client.collection_exists(&self.collection_name).await? {
+            self.client
+                .create_collection(
+                    CreateCollectionBuilder::new(&self.collection_name)
+                        .vectors_config(
+                            VectorParamsBuilder::new(self.vector_size, Distance::Cosine).build(),
+                        )
+                        .build(),
+                )
+                .await?;
+        }
+        Ok(())
+    }
+
     async fn add_documents(&self, documents: &[Document]) -> Result<()> {
         let vectors = self
             .document_embedder
@@ -115,7 +137,7 @@ impl VectorStore for QdrantVectorStore {
 }
 
 impl QdrantVectorStoreBuilder {
-    pub fn with_client(mut self, client: Qdrant) -> Self {
+    pub fn with_client(mut self, client: Arc<Qdrant>) -> Self {
         self.client = Some(client);
         self
     }
@@ -155,6 +177,9 @@ impl QdrantVectorStoreBuilder {
             document_embedder: self
                 .document_embedder
                 .ok_or_else(|| anyhow!("document_embedder is required"))?,
+            vector_size: self
+                .vector_size
+                .ok_or_else(|| anyhow!("vector_size is required"))?,
         })
     }
 }

@@ -20,6 +20,7 @@ pub struct Similarity {
 
 #[async_trait]
 pub trait VectorStore: Send + Sync {
+    async fn ensure_index(&self) -> Result<()>;
     async fn add_documents(&self, documents: &[Document]) -> Result<()>;
     async fn delete_documents(&self, ids: &[String]) -> Result<()>;
     async fn get_documents(&self, ids: &[String]) -> Result<Vec<StoredDocument>>;
