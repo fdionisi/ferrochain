@@ -9,8 +9,8 @@ use ferrochain::{
 pub use qdrant_client;
 use qdrant_client::{
     qdrant::{
-        CreateCollectionBuilder, Distance, PointStruct, ScoredPoint, SearchPointsBuilder,
-        UpsertPointsBuilder, VectorParamsBuilder,
+        CreateCollectionBuilder, DeletePointsBuilder, Distance, GetPointsBuilder, PointId,
+        PointStruct, ScoredPoint, SearchPointsBuilder, UpsertPointsBuilder, VectorParamsBuilder,
     },
     Payload, Qdrant,
 };
@@ -94,12 +94,48 @@ impl VectorStore for QdrantVectorStore {
         Ok(())
     }
 
-    async fn delete_documents(&self, _ids: &[String]) -> Result<()> {
-        todo!()
+    async fn delete_documents(&self, ids: &[String]) -> Result<()> {
+        self.client
+            .delete_points(
+                DeletePointsBuilder::new(&self.collection_name)
+                    .points(ids.to_vec())
+                    .wait(true),
+            )
+            .await?;
+        Ok(())
     }
 
-    async fn get_documents(&self, _ids: &[String]) -> Result<Vec<StoredDocument>> {
-        todo!()
+    async fn get_documents(&self, ids: &[String]) -> Result<Vec<StoredDocument>> {
+        let points = self
+            .client
+            .get_points(
+                GetPointsBuilder::new(
+                    &self.collection_name,
+                    ids.into_iter()
+                        .map(|id| id.to_owned().into())
+                        .collect::<Vec<PointId>>(),
+                )
+                .with_vectors(true)
+                .with_payload(true),
+            )
+            .await?;
+
+        let documents = points
+            .result
+            .into_iter()
+            .map(|point| StoredDocument {
+                id: serde_json::from_value::<Uuid>(point.payload["id"].clone().into_json())
+                    .unwrap()
+                    .to_string(),
+                document: Document {
+                    content: point.payload["content"].as_str().unwrap().to_string(),
+                    metadata: serde_json::from_value(point.payload["metadata"].clone().into_json())
+                        .unwrap(),
+                },
+            })
+            .collect();
+
+        Ok(documents)
     }
 
     async fn search(&self, query: &str, limit: u64) -> Result<Vec<Similarity>> {
@@ -162,6 +198,11 @@ impl QdrantVectorStoreBuilder {
 
     pub fn with_document_embedder(mut self, embedder: Arc<dyn Embedder>) -> Self {
         self.document_embedder = Some(embedder);
+        self
+    }
+
+    pub fn with_vector_size(mut self, vector_size: u64) -> Self {
+        self.vector_size = Some(vector_size);
         self
     }
 

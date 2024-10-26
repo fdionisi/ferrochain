@@ -1,0 +1,8 @@
+[package]
+name = "ferrochain-surrealdb-memory"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+surrealdb.workspace = true
+ferrochain.workspace = true

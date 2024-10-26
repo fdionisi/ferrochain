@@ -1,0 +1,9 @@
+[package]
+name = "ferrochain-firecrawl-retriever"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ferrochain.workspace = true
+firecrawl = "^1.0"
+serde_json.workspace = true

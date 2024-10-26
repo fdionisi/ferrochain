@@ -23,22 +23,33 @@ members = [
     "embedders/jina",
     "embedders/voyageai",
     "graphstore/neo4j",
+    "graphstore/surrealdb",
     "loaders/markdown",
     "memories/in-memory",
+    "memories/surrealdb",
     "rerankers/jina",
     "rerankers/voyageai",
     "retrievers/exa",
+    "retrievers/firecrawl",
     "retrievers/tavily",
-    "splitters/markdown",
     "splitters/code",
+    "splitters/markdown",
     "vectorstores/qdrant",
+    "vectorstores/surrealdb",
 ]
 
 [workspace.dependencies]
 anyhow = "1.0.86"
+exa-sdk = { git = "https://github.com/fdionisi/exa-sdk", rev = "24e8fb140d57cb8dafd7aad3390edff96089cfd7" }
 ferrochain = { path = "." }
+http-client = { git = "https://github.com/fdionisi/http-client", rev = "033ac96ab12ac3d13b78f9725b237380917c7094" }
 jina-sdk = { git = "https://github.com/fdionisi/jina-sdk", rev = "bb3845c85787017339603fe5b4a3b03447786cdd" }
 serde_json = "1.0.121"
+surrealdb = "2.0.4"
+uuid = { version = "1.10.0", features = [
+    "serde",
+    "v4",
+    "fast-rng",
+    "macro-diagnostics",
+] }
 voyageai-sdk = { git = "https://github.com/fdionisi/voyageai-sdk", rev = "e61ea19730b343fa448b3100a84170ac26f243e2" }
-exa-sdk = { git = "https://github.com/fdionisi/exa-sdk", rev = "24e8fb140d57cb8dafd7aad3390edff96089cfd7" }
-http-client = { git = "https://github.com/fdionisi/http-client", rev = "033ac96ab12ac3d13b78f9725b237380917c7094" }
